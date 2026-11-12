@@ -53,6 +53,26 @@ public class AnimalService
         return true;
     }
 
+    
+public async Task<bool> PatchAsync(Guid id, UpdateAnimalRequest request)
+{
+    var animal = await _context.Animals.FindAsync(id);
+
+    if (animal is null)
+        return false;
+
+    if (request.Name is not null)
+        animal.Name = request.Name.Trim();
+
+    if (request.Species is not null)
+        animal.Species = request.Species.Trim();
+
+    await _context.SaveChangesAsync();
+
+    return true;
+}
+
+
     public async Task<AnimalResponse> CreateAsync(CreateAnimalRequest request)
     {
         var animalName = request.Name.Trim();

@@ -28,7 +28,7 @@ public class AnimalsController : ControllerBase
         return Ok(animal);
     }
 
-    [HttpDelete("{id: guid}")]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var deleted = await _animalService.DeleteByIdAsync(id);
@@ -48,6 +48,14 @@ public class AnimalsController : ControllerBase
             new {id = animal.Id},
             animal
         );
+    }
+
+    [HttpPatch("{id:guid}")]
+    public async Task<IActionResult> Update(Guid Id, [FromBody] UpdateAnimalRequest request)
+    {
+        var updated = await _animalService.PatchAsync(Id, request);
+        if (!updated) return NotFound();
+        return NoContent();
     }
 
 }
