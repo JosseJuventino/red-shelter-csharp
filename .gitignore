@@ -1,0 +1,16 @@
+# .NET
+**/bin/
+**/obj/
+
+# Visual Studio / VS Code
+.vs/
+.vscode/
+
+# Archivos locales
+*.user
+*.suo
+
+# Variables de entorno y secretos
+.env
+.env.*
+!.env.example
