@@ -9,6 +9,6 @@ public class CreateAnimalRequest
     public String Name {get; set;} = string.Empty;
 
     [Required]
-    [MaxLength(100)]
+    [MaxLength(60)]
     public String Species {get; set;} = string.Empty;
 }

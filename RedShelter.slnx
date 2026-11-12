@@ -2,4 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/RedShelter.Api/RedShelter.Api.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/RedShelter.Tests/RedShelter.Tests.csproj" />
+  </Folder>
 </Solution>
