@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RedShelter.Api.Features.Animals;
+using RedShelter.Api.Features.Shelters;
 using RedShelter.Api.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,8 +15,10 @@ var connectionString = builder.Configuration
 builder.Services.AddDbContext<RedShelterDbContext>(
     options => options.UseSqlServer(connectionString)
 );
-// Se agregan los 
-builder.Services.AddScoped<AnimalService>(); 
+// Se agregan los servicios
+builder.Services.AddScoped<AnimalService>();
+builder.Services.AddScoped<ShelterService>(); 
+
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
