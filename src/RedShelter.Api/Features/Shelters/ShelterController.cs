@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RedShelter.Api.Features.Shelters;
@@ -39,5 +40,16 @@ public class ShelterController : ControllerBase
     {
         var shelters = await _shelterService.GetAllAsync();
         return Ok(shelters);
+    }
+
+    [HttpGet("{id:guid}/animals")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<AnimalResponse>?>> GetAnimals(Guid id)
+    {
+        var animals = await _shelterService.AnimalResponseAsync(id);
+        if (animals is null) return NotFound();
+
+        return Ok(animals);
     }
 }

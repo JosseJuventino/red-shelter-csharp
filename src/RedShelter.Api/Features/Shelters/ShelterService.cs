@@ -58,4 +58,22 @@ public class ShelterService
                 s.City
             )).ToListAsync();
     }
+
+    public async Task<List<AnimalResponse>?> AnimalResponseAsync(Guid shelterId)
+    {
+        // Devuelve true si existe al menos un refugio que cumple la condición. diferente de 
+        // Es diferente de FindAsync(), porque no necesitamos obtener todo el objeto
+        var exists = await _context.Shelters.AnyAsync(s => s.Id == shelterId);
+        if(!exists) return null;
+        
+        return await _context.Animals
+            .AsNoTracking()
+            .Where(a => a.ShelterId == shelterId)
+            .Select(a => new AnimalResponse(
+                a.Id,
+                a.Name,
+                a.Species,
+                a.IsAvailable
+            )).ToListAsync();
+    }
 }
