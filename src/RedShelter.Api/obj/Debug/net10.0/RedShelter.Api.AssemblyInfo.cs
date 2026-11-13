@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RedShelter.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1172950a3eb43487c6d78cff5909b04bdfeeb6a8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+70fc88fef39c5674031b7015659db54e16683e0d")]
 [assembly: System.Reflection.AssemblyProductAttribute("RedShelter.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RedShelter.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

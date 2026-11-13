@@ -1,0 +1,66 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace RedShelter.Api.Migrations
+{
+    /// <inheritdoc />
+    public partial class AddShelters : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AddColumn<Guid>(
+                name: "ShelterId",
+                table: "Animals",
+                type: "uniqueidentifier",
+                nullable: true);
+
+            migrationBuilder.CreateTable(
+                name: "Shelters",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shelters", x => x.Id);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Animals_ShelterId",
+                table: "Animals",
+                column: "ShelterId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Animals_Shelters_ShelterId",
+                table: "Animals",
+                column: "ShelterId",
+                principalTable: "Shelters",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Animals_Shelters_ShelterId",
+                table: "Animals");
+
+            migrationBuilder.DropTable(
+                name: "Shelters");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Animals_ShelterId",
+                table: "Animals");
+
+            migrationBuilder.DropColumn(
+                name: "ShelterId",
+                table: "Animals");
+        }
+    }
+}

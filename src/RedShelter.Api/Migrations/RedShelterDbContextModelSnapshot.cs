@@ -36,13 +36,52 @@ namespace RedShelter.Api.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid?>("ShelterId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Species")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ShelterId");
+
                     b.ToTable("Animals");
+                });
+
+            modelBuilder.Entity("RedShelter.Api.Features.Shelters.Shelter", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Shelters");
+                });
+
+            modelBuilder.Entity("RedShelter.Api.Features.Animals.Animal", b =>
+                {
+                    b.HasOne("RedShelter.Api.Features.Shelters.Shelter", "Shelter")
+                        .WithMany("Animals")
+                        .HasForeignKey("ShelterId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Shelter");
+                });
+
+            modelBuilder.Entity("RedShelter.Api.Features.Shelters.Shelter", b =>
+                {
+                    b.Navigation("Animals");
                 });
 #pragma warning restore 612, 618
         }
