@@ -41,36 +41,36 @@ public class AnimalService
     public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var animal = await _context.Animals.FindAsync(id);
-        if(animal is null)
+        if (animal is null)
         {
             return false;
         }
-        
-         _context.Animals.Remove(animal);
+
+        _context.Animals.Remove(animal);
 
         await _context.SaveChangesAsync();
 
         return true;
     }
 
-    
-public async Task<bool> PatchAsync(Guid id, UpdateAnimalRequest request)
-{
-    var animal = await _context.Animals.FindAsync(id);
 
-    if (animal is null)
-        return false;
+    public async Task<bool> PatchAsync(Guid id, UpdateAnimalRequest request)
+    {
+        var animal = await _context.Animals.FindAsync(id);
 
-    if (request.Name is not null)
-        animal.Name = request.Name.Trim();
+        if (animal is null)
+            return false;
 
-    if (request.Species is not null)
-        animal.Species = request.Species.Trim();
+        if (request.Name is not null)
+            animal.Name = request.Name.Trim();
 
-    await _context.SaveChangesAsync();
+        if (request.Species is not null)
+            animal.Species = request.Species.Trim();
 
-    return true;
-}
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
 
 
     public async Task<AnimalResponse> CreateAsync(CreateAnimalRequest request)
@@ -85,7 +85,7 @@ public async Task<bool> PatchAsync(Guid id, UpdateAnimalRequest request)
         };
 
         _context.Animals.Add(animal);
-        
+
         await _context.SaveChangesAsync();
 
         return new AnimalResponse(
@@ -95,4 +95,20 @@ public async Task<bool> PatchAsync(Guid id, UpdateAnimalRequest request)
             animal.IsAvailable
         );
     }
+
+    public async Task<bool> AssignShelterAsync(Guid animalId, Guid shelterId)
+    {
+        var animal = await _context.Animals.FindAsync(animalId);
+        if(animal is null) return false;   
+
+        var shelter = await _context.Shelters.AnyAsync(s => s.Id == shelterId);
+        if(!shelter) return false;
+
+        animal.ShelterId = shelterId;
+
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
 }

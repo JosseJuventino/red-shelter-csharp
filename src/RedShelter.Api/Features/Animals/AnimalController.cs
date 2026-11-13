@@ -58,4 +58,15 @@ public class AnimalsController : ControllerBase
         return NoContent();
     }
 
+    [HttpPatch("{id:guid}/shelter")]
+    public async Task<IActionResult> AssignShelter([FromBody] AssignShelterRequest request, Guid id)
+    {
+        if(request.ShelterId == Guid.Empty) return BadRequest("ShelterId no es válido.");
+        var updated = await _animalService.AssignShelterAsync(id, request.ShelterId);
+
+        if (!updated) return NotFound();
+        
+        return NoContent();
+    }
+
 }
