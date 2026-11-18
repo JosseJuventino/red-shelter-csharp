@@ -33,4 +33,13 @@ public class AnimalApiService
 
         return animal ?? throw new JsonException("La api ndevoldio un animal");
     }
+
+    public async Task EliminarAnimalAsync(Guid id)
+    {
+        using var response = await _httpClient.DeleteAsync(
+            $"api/animals/{id}"
+        );
+
+        response.EnsureSuccessStatusCode();
+    }
 }

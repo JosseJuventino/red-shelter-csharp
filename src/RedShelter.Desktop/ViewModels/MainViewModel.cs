@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Text.Json;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RedShelter.Desktop.Models;
@@ -32,11 +33,22 @@ public partial class MainViewModel : ObservableObject
     public partial string Especie { get; set; } = string.Empty;
 
 
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(EliminarAnimalCommand))]
+    public partial AnimalResponse? AnimalSeleccionado { get; set; }
+
+    private bool PuedeEliminar()
+    {
+        return AnimalSeleccionado is not null;
+    }
+
     private bool PuedeGuardar()
     {
         return !string.IsNullOrWhiteSpace(Nombre)
             && !string.IsNullOrWhiteSpace(Especie) && Nombre.Count() < 50;
     }
+
+    
 
     [RelayCommand]
     private void Saludar()
@@ -82,6 +94,45 @@ public partial class MainViewModel : ObservableObject
         catch (JsonException)
         {
             MensajeEstado = "La respuesta de la API no es válida.";
+        }
+    }
+
+
+    [RelayCommand(CanExecute = nameof(PuedeEliminar))]
+    private async Task EliminarAnimalAsync()
+    {
+        var animal = AnimalSeleccionado;
+
+        if (animal is null)
+            return;
+
+        var confirmacion = MessageBox.Show(
+            $"¿Querés eliminar a {animal.Name}?",
+            "Confirmar eliminación",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning
+        );
+
+        if (confirmacion != MessageBoxResult.Yes)
+            return;
+
+        try
+        {
+            await _animalApiService.EliminarAnimalAsync(animal.Id);
+
+            Animales.Remove(animal);
+
+            AnimalSeleccionado = null;
+
+            MensajeEstado = $"Se eliminó a {animal.Name}.";
+        }
+        catch (HttpRequestException ex)
+        {
+            MensajeEstado = $"Error al eliminar: {ex.Message}";
+        }
+        catch (TaskCanceledException)
+        {
+            MensajeEstado = "La API tardó demasiado en responder.";
         }
     }
 
