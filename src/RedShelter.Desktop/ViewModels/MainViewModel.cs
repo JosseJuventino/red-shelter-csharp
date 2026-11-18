@@ -24,10 +24,19 @@ public partial class MainViewModel : ObservableObject
 
     // Propiedades que se mandarán
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(GuardarCommand))]
     public partial string Nombre { get; set; } = string.Empty;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(GuardarCommand))]
     public partial string Especie { get; set; } = string.Empty;
+
+
+    private bool PuedeGuardar()
+    {
+        return !string.IsNullOrWhiteSpace(Nombre)
+            && !string.IsNullOrWhiteSpace(Especie) && Nombre.Count() < 50;
+    }
 
     [RelayCommand]
     private void Saludar()
@@ -36,7 +45,7 @@ public partial class MainViewModel : ObservableObject
     }
 
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(PuedeGuardar))]
     private async Task GuardarAsync()
     {
         if (string.IsNullOrWhiteSpace(Nombre) ||

@@ -50,7 +50,9 @@
             <Button Content="Guardar animal"
                     Command="{Binding GuardarCommand}"
                     Padding="15,5"
-                    VerticalAlignment="Bottom"/>
+                    VerticalAlignment="Bottom"
+
+            />
         </StackPanel>
 
         <!-- Listado -->
