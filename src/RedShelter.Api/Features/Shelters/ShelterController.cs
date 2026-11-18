@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace RedShelter.Api.Features.Shelters;
 
 [ApiController]
-[Route("api/shelter")]
+[Route("api/shelters")]
 public class ShelterController : ControllerBase
 {
     private readonly ShelterService _shelterService;
