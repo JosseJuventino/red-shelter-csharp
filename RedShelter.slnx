@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/RedShelter.Api/RedShelter.Api.csproj" />
+    <Project Path="src/RedShelter.Desktop/RedShelter.Desktop.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/RedShelter.Tests/RedShelter.Tests.csproj" />
