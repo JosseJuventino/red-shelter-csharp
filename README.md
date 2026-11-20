@@ -1,4 +1,4 @@
-# RedShelter
+7# RedShelter
 
 Sistema de gestión de animales y refugios. Es un CRUD completo pensado como **proyecto de referencia**: sirve para consultar rápidamente cómo se arma una solución .NET de punta a punta (API + base de datos + cliente de escritorio + pruebas) cuando hay que construir algo parecido desde cero.
 
@@ -290,7 +290,34 @@ public class RedShelterDbContext : DbContext
 }
 ```
 
+
 No hace falta `HasForeignKey()`: EF reconoce `ShelterId` por convención (`<Navegación>Id`).
+
+## Transactiobs
+```csharp
+await using var transaction =
+    await _context.Database.BeginTransactionAsync();
+
+try
+{
+    producto.Stock -= 1;
+
+    _context.Ventas.Add(new Venta
+    {
+        ProductoId = producto.Id,
+        Total = producto.Precio
+    });
+
+    await _context.SaveChangesAsync();
+
+    await transaction.CommitAsync();
+}
+catch
+{
+    await transaction.RollbackAsync();
+    throw;
+}
+```
 
 ### 5.3 Program.cs
 
