@@ -28,6 +28,10 @@
                     Command="{Binding EliminarAnimalCommand}"
                     Margin="10,0,0,0"
                     Padding="15,5"/>
+            <Button Content="Editar animal"
+                    Command="{Binding EditarAnimalCommand}"
+                    Padding="15,5"
+                    Margin="10,0,0,0"/>
         </StackPanel>
 
         <!-- Formulario -->

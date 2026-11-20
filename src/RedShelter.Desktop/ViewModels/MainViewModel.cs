@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RedShelter.Desktop.Models;
 using RedShelter.Desktop.Services;
-
+using RedShelter.Desktop.Views;
 namespace RedShelter.Desktop.ViewModels;
 
 public partial class MainViewModel : ObservableObject
@@ -35,6 +35,7 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EliminarAnimalCommand))]
+    [NotifyCanExecuteChangedFor(nameof(EditarAnimalCommand))]
     public partial AnimalResponse? AnimalSeleccionado { get; set; }
 
     private bool PuedeEliminar()
@@ -48,13 +49,60 @@ public partial class MainViewModel : ObservableObject
             && !string.IsNullOrWhiteSpace(Especie) && Nombre.Trim().Length < 50;
     }
 
-    
+
 
     [RelayCommand]
     private void Saludar()
     {
         MensajeEstado = "¡Hola desde MVVM!";
     }
+
+
+    [RelayCommand(CanExecute = nameof(PuedeEliminar))]
+    private async Task EditarAnimalAsync()
+    {
+        var animal = AnimalSeleccionado;
+
+        if (animal is null)
+            return;
+
+        var ventana = new EditarAnimalWindow(animal)
+        
+        {
+            Owner = Application.Current.MainWindow
+        };
+
+        var resultado = ventana.ShowDialog();
+
+        if (resultado != true)
+            return;
+
+        try
+        {
+            var request = new UpdateAnimalRequest(
+                ventana.ViewModel.Nombre.Trim(),
+                ventana.ViewModel.Especie.Trim()
+            );
+
+            await _animalApiService.ActualizarAnimalAsync(
+                animal.Id,
+                request
+            );
+
+            await CargarAnimalesCommand.ExecuteAsync(null);
+
+            MensajeEstado = $"Se actualizó a {request.Name}.";
+        }
+        catch (HttpRequestException ex)
+        {
+            MensajeEstado = $"Error al actualizar: {ex.Message}";
+        }
+        catch (TaskCanceledException)
+        {
+            MensajeEstado = "La API tardó demasiado en responder.";
+        }
+    }
+
 
 
     [RelayCommand(CanExecute = nameof(PuedeGuardar))]
