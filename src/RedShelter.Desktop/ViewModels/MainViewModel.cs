@@ -45,7 +45,7 @@ public partial class MainViewModel : ObservableObject
     private bool PuedeGuardar()
     {
         return !string.IsNullOrWhiteSpace(Nombre)
-            && !string.IsNullOrWhiteSpace(Especie) && Nombre.Count() < 50;
+            && !string.IsNullOrWhiteSpace(Especie) && Nombre.Trim().Length < 50;
     }
 
     

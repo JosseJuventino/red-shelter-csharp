@@ -42,4 +42,18 @@ public class AnimalApiService
 
         response.EnsureSuccessStatusCode();
     }
+
+
+    public async Task ActualizarAnimalAsync(Guid id, UpdateAnimalRequest request)
+    {
+        using var response = await _httpClient.PatchAsJsonAsync(
+            $"api/animals/{id}",
+            request
+        );
+
+        response.EnsureSuccessStatusCode();
+    }
+
+
+
 }
